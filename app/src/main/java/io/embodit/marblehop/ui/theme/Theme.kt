@@ -42,7 +42,7 @@ object Palette {
     val Beech = Color(0xFFB08A5E)
     val Walnut = Color(0xFF7A5638)
     val Groove = Color(0xFF94714A)
-    /** Lit-hole markers: step = pale sky (3.15:1 on the groove), hop = gold ring (3.17:1), refused = dark red ring (4.9:1 on beech). */
+    /** Lit-hole markers: step = pale sky (3.15:1 on the groove), hop = gold ring (3.17:1), refused = dark red ring (3.8:1 on beech). */
     val StepDot = Color(0xFFA8E4FF)
     val HopRing = Color(0xFFFFD86B)
     val RedRing = Color(0xFF6E1210)

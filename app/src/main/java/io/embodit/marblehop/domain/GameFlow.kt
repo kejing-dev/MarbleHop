@@ -211,6 +211,8 @@ class GameFlow(
 
     fun newGame(config: GameConfig) {
         cancelJobs()
+        // any game started means the welcome is done: a later relaunch restores the save instead of showing S01 again
+        if (!settings().firstRunDone) onSettings(settings().copy(firstRunDone = true))
         val now = clock()
         val base = PlayState(phase = Phase.IDLE, config = config, position = Position.start(config.seats), resumedAt = now,
             firstGame = !settings().coachDone)

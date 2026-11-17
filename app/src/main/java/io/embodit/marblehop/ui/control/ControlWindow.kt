@@ -153,16 +153,20 @@ private fun SetupBlock(state: PlayState, settings: Settings, graph: Graph) {
     val players = settings.lastPlayers
     val opp = settings.lastOpponent
     Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
-        Txt(stringResource(R.string.setup_players), "setup/players-label", style = PicoTheme.typography.titleMedium)
-        Row(Modifier.fillMaxWidth()) {
-            Segments(StarBoard.PLAYER_COUNTS.map { it to "$it" }, players, "setup/players", { n -> graph.flow.previewSetup(n, opp) }, Modifier.weight(1f))
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Txt(stringResource(R.string.setup_players), "setup/players-label", style = PicoTheme.typography.titleMedium)
+            Row(Modifier.fillMaxWidth()) {
+                Segments(StarBoard.PLAYER_COUNTS.map { it to "$it" }, players, "setup/players", { n -> graph.flow.previewSetup(n, opp) }, Modifier.weight(1f))
+            }
         }
-        Txt(stringResource(R.string.setup_opponent), "setup/opp-label", style = PicoTheme.typography.titleMedium)
-        Row(Modifier.fillMaxWidth()) {
-            Segments(
-                listOf(Opponent.EASY to stringResource(R.string.opp_easy), Opponent.SMART to stringResource(R.string.opp_smart), Opponent.HOTSEAT to stringResource(R.string.opp_hotseat)),
-                opp, "setup/opp", { o -> graph.flow.previewSetup(players, o) }, Modifier.weight(1f),
-            )
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Txt(stringResource(R.string.setup_opponent), "setup/opp-label", style = PicoTheme.typography.titleMedium)
+            Row(Modifier.fillMaxWidth()) {
+                Segments(
+                    listOf(Opponent.EASY to stringResource(R.string.opp_easy), Opponent.SMART to stringResource(R.string.opp_smart), Opponent.HOTSEAT to stringResource(R.string.opp_hotseat)),
+                    opp, "setup/opp", { o -> graph.flow.previewSetup(players, o) }, Modifier.weight(1f),
+                )
+            }
         }
         Txt(stringResource(if (opp == Opponent.HOTSEAT) R.string.setup_note_hotseat else R.string.setup_note_bot), "setup/note",
             style = PicoTheme.typography.bodyMedium, color = PicoTheme.colorScheme.labelSecondary, maxLines = 3)
