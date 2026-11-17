@@ -40,6 +40,7 @@ import io.embodit.marblehop.ui.board.input.resolveUp
  *   nav up|down|left|right · drop · undo · newgame · confirm · cancel · start (S18 [开始]) · again · setup
  *   replay "q,r [hand-ray|eye-hand|controller]"   resolve real scene entities of that hole and tap the deepest one
  *   tilt 0|30|45|60|75|90 · lang zh|en|system · sound off|1|2|3 · mute on|off · page play|rules|settings · rules 0|1
+ *   panel centre|right (reopen the control window mid-view for screenshots / beside the board)
  *   hold on|off (bots wait) · alerthold on|off · freeze <ms>|off · seed N · recall · exitask · first (S01 start)
  *   s00hold on|off (next launch keeps the S00 stand-in 10 s) · dump · evidence
  */
@@ -120,6 +121,7 @@ class DebugCommandReceiver : BroadcastReceiver() {
             "freeze" -> flow.freeze(if (a == "off") null else a.toLongOrNull())
             "seed" -> a.toIntOrNull()?.let { flow.aiSeed = it }
             "recall" -> graph.window.recall()
+            "panel" -> { Ui.debugPanelCentre = a.startsWith("centre") || a.startsWith("center"); graph.window.recall() }
             "exitask" -> { Ui.page = Page.SETTINGS; Ui.exitConfirm = true }
             "s00hold" -> context.getSharedPreferences("debug", Context.MODE_PRIVATE).edit().putBoolean("s00hold", on).apply()
             "dump", "state" -> Log.i(TAG, "DUMP ${flow.dump()} page=${Ui.page} window=${graph.window.panelState}")

@@ -131,7 +131,7 @@ private fun PlayPage(state: PlayState, settings: Settings, graph: Graph) {
 /** S01: title + the three steps + [开始第一局] + [自己选人数]. */
 @Composable
 private fun WelcomeBlock(graph: Graph) {
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)) {
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
         Txt(stringResource(R.string.welcome_title), "welcome/title", style = PicoTheme.typography.headlineSmall)
         listOf(R.string.welcome_step_1, R.string.welcome_step_2, R.string.welcome_step_3).forEachIndexed { i, res ->
             Row(Modifier.fillMaxWidth().height(56.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -142,7 +142,6 @@ private fun WelcomeBlock(graph: Graph) {
                 Txt(stringResource(res), "welcome/step", style = PicoTheme.typography.titleMedium, maxLines = 2, modifier = Modifier.weight(1f))
             }
         }
-        Spacer(Modifier.height(4.dp))
         PrimaryButton(stringResource(R.string.btn_first_game), "welcome/first", onClick = { graph.flow.firstGame() }, modifier = Modifier.fillMaxWidth())
         SecondaryButton(stringResource(R.string.btn_choose_players), "welcome/choose", onClick = { graph.flow.welcomeChoose() }, modifier = Modifier.fillMaxWidth())
     }
@@ -153,7 +152,7 @@ private fun WelcomeBlock(graph: Graph) {
 private fun SetupBlock(state: PlayState, settings: Settings, graph: Graph) {
     val players = settings.lastPlayers
     val opp = settings.lastOpponent
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(14.dp, Alignment.CenterVertically)) {
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
         Txt(stringResource(R.string.setup_players), "setup/players-label", style = PicoTheme.typography.titleMedium)
         Row(Modifier.fillMaxWidth()) {
             Segments(StarBoard.PLAYER_COUNTS.map { it to "$it" }, players, "setup/players", { n -> graph.flow.previewSetup(n, opp) }, Modifier.weight(1f))
@@ -178,7 +177,7 @@ private fun GameBlock(state: PlayState, settings: Settings, graph: Graph) {
     val flow = graph.flow
     val cfg = state.config ?: return
     val camp = state.camp
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)) {
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
         // whose turn (same source as the sign, D38) + mute always on the main page (B31 exception, D15)
         Row(Modifier.fillMaxWidth().height(64.dp), verticalAlignment = Alignment.CenterVertically) {
             SeatDot(camp, 30.dp)
@@ -212,10 +211,10 @@ private fun GameBlock(state: PlayState, settings: Settings, graph: Graph) {
     }
 }
 
-/** An arrow key: 64 x 72 dp, arrow glyph over its word (B19: icons carry text). */
+/** An arrow key: 76 x 72 dp, arrow glyph over its word (B19: icons carry text). */
 @Composable
 private fun NavKey(glyph: String, word: String, tag: String, enabled: Boolean, onClick: () -> Unit) {
-    KeyButton(glyph, word, tag, onClick = onClick, enabled = enabled, modifier = Modifier.width(64.dp).height(72.dp))
+    KeyButton(glyph, word, tag, onClick = onClick, enabled = enabled, modifier = Modifier.width(76.dp).height(72.dp))
 }
 
 /** Marbles home per seat: one chip each (6 players: two rows of three). */
@@ -292,7 +291,7 @@ private fun ConfirmBlock(kind: ConfirmKind, graph: Graph) {
 @Composable
 private fun HandoffBlock(state: PlayState, graph: Graph) {
     val camp = state.camp
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally) {
         SeatDot(camp, 96.dp)
         Txt(stringResource(R.string.handoff_title, seat(camp)), "handoff/title", style = PicoTheme.typography.headlineSmall)
         val last = state.moves.withIndex().lastOrNull { it.value.from >= 0 }
@@ -325,7 +324,7 @@ private fun ResultBlock(state: PlayState, graph: Graph) {
     val pos = state.position ?: return
     val secs = r.elapsedMs / 1000
     val time = "%d:%02d".format(secs / 60, secs % 60)
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)) {
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             SeatDot(r.winner, 36.dp)
             Spacer(Modifier.width(12.dp))
@@ -357,7 +356,7 @@ private fun ResultBlock(state: PlayState, graph: Graph) {
 
 @Composable
 private fun RulesPage() {
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)) {
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
         // same-page option (rules / how to play), not page navigation
         Row(Modifier.fillMaxWidth()) {
             Segments(listOf(0 to stringResource(R.string.rules_title), 1 to stringResource(R.string.how_to_title)), Ui.rulesView, "rules/view", { Ui.rulesView = it }, Modifier.weight(1f))
@@ -395,11 +394,11 @@ private fun RulesDiagram() {
             for (i in 0 until 7) drawCircle(Palette.Groove, r * 0.9f, Offset(gap * (i + 0.5f), y))
             // step: marble at 0 -> 1
             drawCircle(Palette.Seat[0], r, Offset(gap * 0.5f, y))
-            drawCircle(Color(0xFF3D7BFF), r * 0.5f, Offset(gap * 1.5f, y))
+            drawCircle(Palette.StepDot, r * 0.5f, Offset(gap * 1.5f, y))
             // hop: marble at 3 over 4 into 5
             drawCircle(Palette.Seat[0], r, Offset(gap * 3.5f, y))
             drawCircle(Palette.Seat[3], r, Offset(gap * 4.5f, y))
-            drawCircle(Palette.Tertiary, r * 0.8f, Offset(gap * 5.5f, y), style = Stroke(r * 0.3f))
+            drawCircle(Palette.HopRing, r * 0.8f, Offset(gap * 5.5f, y), style = Stroke(r * 0.3f))
             val path = androidx.compose.ui.graphics.Path().apply { moveTo(gap * 3.5f, y - r); quadraticTo(gap * 4.5f, y - r * 4.2f, gap * 5.5f, y - r) }
             drawPath(path, Palette.Ink, style = Stroke(3f))
         }
@@ -418,7 +417,7 @@ private fun SettingsPage(settings: Settings, graph: Graph) {
     val navigator = LocalSpatialNavigator.current
     fun upd(change: (Settings) -> Settings) = graph.settings.update(change)
     // No scrolling: [重开控制窗] and [退出应用] are always on the first screen (D44).
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically)) {
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
         OptionRow(stringResource(R.string.settings_language), "settings/lang") {
             Segments(listOf(Language.SYSTEM to stringResource(R.string.lang_system), Language.ZH to stringResource(R.string.lang_zh), Language.EN to stringResource(R.string.lang_en)),
                 settings.language, "settings/lang", { l -> upd { it.copy(language = l) } }, Modifier.weight(1f))

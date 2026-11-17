@@ -42,11 +42,15 @@ object Palette {
     val Beech = Color(0xFFB08A5E)
     val Walnut = Color(0xFF7A5638)
     val Groove = Color(0xFF94714A)
+    /** Lit-hole markers: step = pale sky (3.15:1 on the groove), hop = gold ring (3.17:1), refused = dark red ring (4.9:1 on beech). */
+    val StepDot = Color(0xFFA8E4FF)
+    val HopRing = Color(0xFFFFD86B)
+    val RedRing = Color(0xFF6E1210)
 
     /** Seat colours by camp (gameSpec.coords): 0 mint · 1 lemon · 2 indigo · 3 amber · 4 cherry · 5 grape. */
     val Seat = listOf(Color(0xFF5FD6B0), Color(0xFFEAE062), Color(0xFF4C63D2), Color(0xFFF2B544), Color(0xFFE0555F), Color(0xFF9B6BD6))
     /** Seat colours dark enough for text / rims on light glass. */
-    val SeatInk = listOf(Color(0xFF1F6E57), Color(0xFF6B6410), Color(0xFF2C3E9E), Color(0xFF7A5200), Color(0xFF9E2630), Color(0xFF5B3696))
+    val SeatInk = listOf(Color(0xFF1F6E57), Color(0xFF57510A), Color(0xFF2C3E9E), Color(0xFF7A5200), Color(0xFF9E2630), Color(0xFF5B3696))
 }
 
 /**

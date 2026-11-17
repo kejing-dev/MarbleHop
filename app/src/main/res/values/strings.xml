@@ -64,7 +64,7 @@
     <!-- S09 result -->
     <string name="result_wins">%1$s wins</string>
     <string name="result_you_win">You win!</string>
-    <string name="result_stats">%1$d moves · %2$s · longest chain %3$d</string>
+    <string name="result_stats">Moves %1$d · %2$s · longest chain %3$d</string>
     <string name="result_place">%1$d. %2$s · %3$d home</string>
     <string name="btn_again">Play again</string>
     <string name="btn_change_players">Change players…</string>

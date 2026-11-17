@@ -19,4 +19,10 @@ object Ui {
     var page by mutableStateOf(Page.PLAY)
     var exitConfirm by mutableStateOf(false)
     var rulesView by mutableStateOf(0)
+    /**
+     * Debug builds only (broadcast `panel centre`): reopen the control window with the system default placement, in the
+     * middle of the view, so the whole panel fits an emulator screenshot (the 1.08 m board pushes Placement.right past
+     * the emulator's view edge). Never set in release builds.
+     */
+    @Volatile var debugPanelCentre = false
 }

@@ -30,7 +30,7 @@ fun mainApp(scope: SpatialAppScope) =
             defaultSize = WindowContainerSize(width = 560.dp, height = 540.dp),
             // First open and every reopen: beside the board volume (profile D44 2026-11-05: Shared Space has no "bring it in
             // front"; Placement.none() does not follow the head and lands on top of the board).
-            placement = { containers.firstOrNull { it.id == Containers.BOARD }?.let { Placement.right(it) } ?: Placement.none() },
+            placement = { containers.firstOrNull { it.id == Containers.BOARD }?.takeIf { !io.embodit.marblehop.ui.Ui.debugPanelCentre }?.let { Placement.right(it) } ?: Placement.none() },
         ) {
             MarbleTheme {
                 Box(Modifier.windowConstraints(minWidth = 520.dp, minHeight = 500.dp, maxWidth = 900.dp, maxHeight = 720.dp)) { ControlWindow() }

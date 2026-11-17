@@ -139,11 +139,13 @@ internal class SceneResources private constructor() {
                 async(io) { r.beech = pbr(Palette.Beech, roughness = 0.62f).keep() },
                 async(io) { r.grooveMat = pbr(Palette.Groove, roughness = 0.6f).keep() },
                 async(io) { r.pipIdle = pbr(Palette.Beech, roughness = 0.5f).keep() },
-                async(io) { r.stepDot = unlit(Color(0xFF3D7BFF)).keep() },
-                async(io) { r.hopRing = unlit(Palette.Tertiary).keep() },
+                // marker colours measured against what is behind them (ui-audit contrast table): pale sky / gold on the dark groove,
+                // white chain dots and a dark red ring on the beech face, all >= 3:1
+                async(io) { r.stepDot = unlit(Palette.StepDot).keep() },
+                async(io) { r.hopRing = unlit(Palette.HopRing).keep() },
                 async(io) { r.selectRing = unlit(Color(0xFFFFFFFF)).keep() },
-                async(io) { r.chainDot = unlit(Color(0xFFFFF4D6), 0.85f).keep() },
-                async(io) { r.red = unlit(Palette.Error).keep() },
+                async(io) { r.chainDot = unlit(Color(0xFFFFFAEE)).keep() },
+                async(io) { r.red = unlit(Palette.RedRing).keep() },
             ).awaitAll()
             lists.awaitAll()
             r
