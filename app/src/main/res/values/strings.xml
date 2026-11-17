@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Marble Hop</string>
+
+    <!-- tabs -->
+    <string name="tab_play">Game</string>
+    <string name="tab_rules">Rules</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- seats -->
+    <string name="seat_0">Mint</string>
+    <string name="seat_1">Lemon</string>
+    <string name="seat_2">Indigo</string>
+    <string name="seat_3">Amber</string>
+    <string name="seat_4">Cherry</string>
+    <string name="seat_5">Grape</string>
+
+    <!-- S01 welcome -->
+    <string name="welcome_title">Chinese checkers</string>
+    <string name="welcome_step_1">Pinch a marble</string>
+    <string name="welcome_step_2">Drag it to a lit hole</string>
+    <string name="welcome_step_3">Let go and it hops there</string>
+    <string name="btn_first_game">Start your first game</string>
+    <string name="btn_choose_players">Pick players myself</string>
+
+    <!-- S02 setup -->
+    <string name="setup_players">Players</string>
+    <string name="setup_opponent">Opponent</string>
+    <string name="opp_easy">Easy bot</string>
+    <string name="opp_smart">Smart bot</string>
+    <string name="opp_hotseat">Pass and play</string>
+    <string name="setup_note_bot">You\'re Mint, on the near side. The bots take the other seats. Who starts is random.</string>
+    <string name="setup_note_hotseat">Everyone plays on this headset. The board turns to whoever is up.</string>
+    <string name="btn_start">Start</string>
+    <string name="btn_back_to_game">Back to this game</string>
+
+    <!-- in game -->
+    <string name="turn_you">%1$s · your turn</string>
+    <string name="turn_bot">%1$s is thinking</string>
+    <string name="turn_seat">%1$s\'s turn</string>
+    <string name="progress_home">%1$d/10</string>
+    <string name="hint_idle">Pinch a marble and drag it, or tap it</string>
+    <string name="hint_selected">Every lit hole works. Tap one, or use the arrows</string>
+    <string name="hint_preview">Tap it again, or press Drop</string>
+    <string name="hint_dragging">Let go to drop</string>
+    <string name="hint_animating">Hop, hop…</string>
+    <string name="hint_bot">The board waits while a bot moves</string>
+    <string name="hint_rotating">The board turns to the next player</string>
+    <string name="btn_drop">Drop</string>
+    <string name="btn_undo">Undo</string>
+    <string name="btn_new_game">New game…</string>
+    <string name="btn_mute">Mute</string>
+    <string name="nav_up">Up</string>
+    <string name="nav_down">Down</string>
+    <string name="nav_left">Left</string>
+    <string name="nav_right">Right</string>
+
+    <!-- S18 hand-over -->
+    <string name="handoff_title">%1$s\'s turn</string>
+    <string name="handoff_last">Last move · %1$s: %2$s</string>
+    <string name="handoff_none">First move of the game</string>
+    <string name="btn_handoff_start">Start</string>
+
+    <!-- S09 result -->
+    <string name="result_wins">%1$s wins</string>
+    <string name="result_you_win">You win!</string>
+    <string name="result_stats">%1$d moves · %2$s · longest chain %3$d</string>
+    <string name="result_place">%1$d. %2$s · %3$d home</string>
+    <string name="btn_again">Play again</string>
+    <string name="btn_change_players">Change players…</string>
+
+    <!-- S13 confirms -->
+    <string name="confirm_new">Drop this game and start over?</string>
+    <string name="confirm_undo_2p">Does the other player agree?</string>
+    <string name="confirm_exit">Quit Marble Hop?</string>
+    <string name="btn_cancel">Never mind</string>
+    <string name="confirm_yes_new">Start over</string>
+    <string name="confirm_yes_undo">Undo</string>
+    <string name="confirm_yes_exit">Quit</string>
+
+    <!-- sign (≤ 36 Latin characters) -->
+    <string name="sign_loading">Setting up…</string>
+    <string name="sign_welcome">Welcome to Marble Hop</string>
+    <string name="sign_setup">Pick players, then Start</string>
+    <string name="sign_turn">%1$s: pick a marble</string>
+    <string name="sign_coach_1">%1$s: pinch a marble</string>
+    <string name="sign_coach_2">Drag it to a lit hole</string>
+    <string name="sign_coach_3">Let go and watch it hop</string>
+    <string name="sign_selected">Any lit hole works</string>
+    <string name="sign_preview">Tap again to drop</string>
+    <string name="sign_dragging">Let go to drop</string>
+    <string name="sign_step">%1$s: one step</string>
+    <string name="sign_hop">%1$s: one hop</string>
+    <string name="sign_chain_2">Double hop</string>
+    <string name="sign_chain_3">Triple hop</string>
+    <string name="sign_chain_n">%1$d hops in a row</string>
+    <string name="sign_thinking">%1$s is thinking</string>
+    <string name="sign_illegal">Can\'t reach. Lit holes only.</string>
+    <string name="sign_stuck">This one is stuck</string>
+    <string name="sign_camp">Can\'t stop in their camp</string>
+    <string name="sign_handoff">%1$s\'s turn · tap Start</string>
+    <string name="sign_win">%1$s wins</string>
+    <string name="sign_restored">Picking up where you left</string>
+    <string name="sign_passed">%1$s can\'t move, skipped</string>
+
+    <!-- rules (content.rulesPage) -->
+    <string name="rules_title">How it works</string>
+    <string name="rules_1">Goal: move all 10 of your marbles into the camp straight across.</string>
+    <string name="rules_2">One marble per turn: step to an empty hole next to it, or hop over a neighbour into the empty hole behind.</string>
+    <string name="rules_3">After a hop you can keep hopping, as far as the chain goes.</string>
+    <string name="rules_4">Pass through other camps, but don\'t stop there. A marble that\'s home stays home.</string>
+    <string name="rules_5">Someone squatting in your camp? Get 7 or more in with every free hole filled, and you win.</string>
+    <string name="rules_step">step</string>
+    <string name="rules_hop">hop</string>
+    <!-- how to play (B19: one line per main action, gesture and controller) -->
+    <string name="how_to_title">How to play</string>
+    <string name="how_to_drag">Pinch a marble (or hold the trigger), drag to a lit hole, let go.</string>
+    <string name="how_to_tap">Or tap a marble, tap a lit hole, then tap it again or press Drop.</string>
+    <string name="how_to_arrows">Arrows move the pick when holes are hard to hit.</string>
+
+    <!-- settings -->
+    <string name="settings_language">Language</string>
+    <string name="lang_system">System</string>
+    <string name="lang_zh">中文</string>
+    <string name="lang_en">English</string>
+    <string name="settings_sound">Sound</string>
+    <string name="sound_mute">Off</string>
+    <string name="sound_low">Low</string>
+    <string name="sound_mid">Mid</string>
+    <string name="sound_high">High</string>
+    <string name="settings_tilt">Board tilt</string>
+    <string name="tilt_value">%1$d°</string>
+    <string name="tilt_less">Flatter</string>
+    <string name="tilt_more">Steeper</string>
+    <string name="settings_reopen">Reopen the panel</string>
+    <string name="settings_reopen_hint">The panel comes back beside the board. Drag it with the system bar under it.</string>
+    <string name="settings_exit">Quit app</string>
+    <string name="settings_about">v%1$s · Classic Chinese checkers rules · Sounds: CC0 recordings (freesound, Kenney)</string>
+
+    <string name="level_hint">Look straight ahead and the panel opens</string>
+    <string name="open_panel">Open panel</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Marble Hop (design appIcon): light-beech six-point star, 7-hole cluster, mint marble on the lower-right tip -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#E8C9A0" android:pathData="M54.00,20.00 L63.81,37.00 L83.44,37.00 L73.63,54.00 L83.44,71.00 L63.81,71.00 L54.00,88.00 L44.19,71.00 L24.56,71.00 L34.37,54.00 L24.56,37.00 L44.19,37.00Z" />
+    <path android:fillColor="#B08A5E" android:pathData="M51.60,54.00a2.40,2.40 0 1,0 4.80,0a2.40,2.40 0 1,0 -4.80,0ZM59.10,54.00a2.40,2.40 0 1,0 4.80,0a2.40,2.40 0 1,0 -4.80,0ZM55.35,60.50a2.40,2.40 0 1,0 4.80,0a2.40,2.40 0 1,0 -4.80,0ZM47.85,60.50a2.40,2.40 0 1,0 4.80,0a2.40,2.40 0 1,0 -4.80,0ZM44.10,54.00a2.40,2.40 0 1,0 4.80,0a2.40,2.40 0 1,0 -4.80,0ZM47.85,47.50a2.40,2.40 0 1,0 4.80,0a2.40,2.40 0 1,0 -4.80,0ZM55.35,47.50a2.40,2.40 0 1,0 4.80,0a2.40,2.40 0 1,0 -4.80,0Z" />
+    <path android:fillColor="#5FD6B0" android:pathData="M74.94,71.00a8.50,8.50 0 1,0 17.00,0a8.50,8.50 0 1,0 -17.00,0Z" />
+    <path android:fillColor="#EBFFFFFF" android:pathData="M78.85,67.60a2.04,2.04 0 1,0 4.08,0a2.04,2.04 0 1,0 -4.08,0Z" />
+</vector>

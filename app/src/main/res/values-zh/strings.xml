@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">中国跳棋</string>
+
+    <string name="tab_play">对局</string>
+    <string name="tab_rules">规则</string>
+    <string name="tab_settings">设置</string>
+
+    <string name="seat_0">薄荷</string>
+    <string name="seat_1">柠檬</string>
+    <string name="seat_2">靛蓝</string>
+    <string name="seat_3">琥珀</string>
+    <string name="seat_4">樱桃</string>
+    <string name="seat_5">葡萄</string>
+
+    <string name="welcome_title">跳棋</string>
+    <string name="welcome_step_1">捏住一颗珠</string>
+    <string name="welcome_step_2">拖到亮着的孔</string>
+    <string name="welcome_step_3">松手，它自己跳过去</string>
+    <string name="btn_first_game">开始第一局</string>
+    <string name="btn_choose_players">自己选人数</string>
+
+    <string name="setup_players">几个人</string>
+    <string name="setup_opponent">对手</string>
+    <string name="opp_easy">入门电脑</string>
+    <string name="opp_smart">聪明电脑</string>
+    <string name="opp_hotseat">同机轮流</string>
+    <string name="setup_note_bot">你是近处的薄荷，其它座位都是电脑。谁先走随机定。</string>
+    <string name="setup_note_hotseat">大家轮着戴这台头显，轮到谁，盘就转到谁面前。</string>
+    <string name="btn_start">开始</string>
+    <string name="btn_back_to_game">回到这局</string>
+
+    <string name="turn_you">%1$s · 轮到你</string>
+    <string name="turn_bot">%1$s在想</string>
+    <string name="turn_seat">轮到%1$s</string>
+    <string name="progress_home">%1$d/10</string>
+    <string name="hint_idle">捏住一颗珠拖过去，或者点它</string>
+    <string name="hint_selected">亮着的孔都能去，点一个，或者用方向键</string>
+    <string name="hint_preview">再点一次，或者按落下</string>
+    <string name="hint_dragging">松手就落下</string>
+    <string name="hint_animating">一跳，一跳…</string>
+    <string name="hint_bot">电脑走的时候，盘不接手</string>
+    <string name="hint_rotating">盘转到下一位</string>
+    <string name="btn_drop">落下</string>
+    <string name="btn_undo">悔一步</string>
+    <string name="btn_new_game">新对局…</string>
+    <string name="btn_mute">静音</string>
+    <string name="nav_up">上</string>
+    <string name="nav_down">下</string>
+    <string name="nav_left">左</string>
+    <string name="nav_right">右</string>
+
+    <string name="handoff_title">轮到%1$s</string>
+    <string name="handoff_last">上一手 %1$s：%2$s</string>
+    <string name="handoff_none">这局的第一手</string>
+    <string name="btn_handoff_start">开始</string>
+
+    <string name="result_wins">%1$s赢了</string>
+    <string name="result_you_win">你赢了！</string>
+    <string name="result_stats">%1$d 步 · %2$s · 最长 %3$d 连跳</string>
+    <string name="result_place">%1$d. %2$s · 进营 %3$d</string>
+    <string name="btn_again">再来一局</string>
+    <string name="btn_change_players">换人数…</string>
+
+    <string name="confirm_new">这局不留，开新的？</string>
+    <string name="confirm_undo_2p">对方同意了？</string>
+    <string name="confirm_exit">要退出跳棋吗？</string>
+    <string name="btn_cancel">算了</string>
+    <string name="confirm_yes_new">开新的</string>
+    <string name="confirm_yes_undo">悔</string>
+    <string name="confirm_yes_exit">退出</string>
+
+    <string name="sign_loading">准备中…</string>
+    <string name="sign_welcome">欢迎来下跳棋</string>
+    <string name="sign_setup">选好人数就开始</string>
+    <string name="sign_turn">%1$s：点一颗珠</string>
+    <string name="sign_coach_1">%1$s：捏住一颗珠</string>
+    <string name="sign_coach_2">拖到亮着的孔</string>
+    <string name="sign_coach_3">松手，它自己跳过去</string>
+    <string name="sign_selected">亮着的孔都能去</string>
+    <string name="sign_preview">再点一次落下</string>
+    <string name="sign_dragging">松手就落下</string>
+    <string name="sign_step">%1$s：走一步</string>
+    <string name="sign_hop">%1$s：跳一下</string>
+    <string name="sign_chain_2">二连跳</string>
+    <string name="sign_chain_3">三连跳</string>
+    <string name="sign_chain_n">%1$d 连跳</string>
+    <string name="sign_thinking">%1$s在想</string>
+    <string name="sign_illegal">到不了那儿，亮着的才行</string>
+    <string name="sign_stuck">这颗动不了</string>
+    <string name="sign_camp">别人家不能停</string>
+    <string name="sign_handoff">轮到%1$s · 点开始</string>
+    <string name="sign_win">%1$s赢了</string>
+    <string name="sign_restored">接着上次</string>
+    <string name="sign_passed">%1$s没得走，跳过</string>
+
+    <string name="rules_title">怎么下</string>
+    <string name="rules_1">目标：把自己的 10 颗珠全挪进正对面的营地。</string>
+    <string name="rules_2">一回合动一颗：挪到旁边的空孔，或者跳过紧挨着的一颗珠，落到它后面的空孔。</string>
+    <string name="rules_3">跳完还能接着跳，一口气跳多远都行。</string>
+    <string name="rules_4">别人的营地可以路过，不能停。进了对面营地的珠不再出来。</string>
+    <string name="rules_5">对面营地被人占着不走？你进了 7 颗以上、剩下的孔都被占着，也算你赢。</string>
+    <string name="rules_step">走</string>
+    <string name="rules_hop">跳</string>
+    <string name="how_to_title">怎么操作</string>
+    <string name="how_to_drag">捏住一颗珠（或按住扳机），拖到亮着的孔，松手。</string>
+    <string name="how_to_tap">也可以点珠、点亮孔，再点一次或按「落下」。</string>
+    <string name="how_to_arrows">孔不好点时，用方向键挪选中。</string>
+
+    <string name="settings_language">语言</string>
+    <string name="lang_system">跟随系统</string>
+    <string name="lang_zh">中文</string>
+    <string name="lang_en">English</string>
+    <string name="settings_sound">声音</string>
+    <string name="sound_mute">静音</string>
+    <string name="sound_low">小</string>
+    <string name="sound_mid">中</string>
+    <string name="sound_high">大</string>
+    <string name="settings_tilt">棋盘倾角</string>
+    <string name="tilt_value">%1$d°</string>
+    <string name="tilt_less">放平些</string>
+    <string name="tilt_more">立起来</string>
+    <string name="settings_reopen">重开控制窗</string>
+    <string name="settings_reopen_hint">面板会回到棋盘右边，再用面板下方的系统把手拖到想要的位置。</string>
+    <string name="settings_exit">退出应用</string>
+    <string name="settings_about">v%1$s · 中国跳棋通行规则 · 声音：CC0 录音（freesound、Kenney）</string>
+
+    <string name="level_hint">平视前方，面板就出来</string>
+    <string name="open_panel">打开面板</string>
+</resources>
