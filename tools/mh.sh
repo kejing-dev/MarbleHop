@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # tools/mh.sh SERIAL cmd NAME [ARG] : debug broadcast   ·   tools/mh.sh SERIAL log [REGEX] : logcat of tag MarbleHop
-ADB="${ADB:-/c/Users/Admin/Android/Sdk/platform-tools/adb.exe}"
+# adb: $ADB, else adb on PATH, else the Android SDK default for macOS / Windows (Git Bash).
+if [ -z "${ADB:-}" ]; then
+  if command -v adb >/dev/null 2>&1; then ADB=adb
+  elif [ -x "$HOME/Library/Android/sdk/platform-tools/adb" ]; then ADB="$HOME/Library/Android/sdk/platform-tools/adb"
+  elif [ -n "${LOCALAPPDATA:-}" ]; then ADB="$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe"
+  else ADB=adb; fi
+fi
 PKG=io.embodit.marblehop
 D="$1"; shift
 case "${1:-}" in

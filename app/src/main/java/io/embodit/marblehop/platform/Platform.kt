@@ -70,10 +70,10 @@ class Graph(context: Context) {
 
 /**
  * Effects from assets/sounds (profile D51, template §15.1–15.2; build/sound-sources.md). The marble-into-groove
- * clicks are CC0 recordings of a hard stone landing on a wooden board (the board-game template's cleaned set, §15.1: the closest real
- * recording on this machine): place / place_2 / place_3 rotate with ±5 % pitch; a hop mid-chain is the same family,
- * lighter and a little higher; back = the softer retract click. UI cues (no, edge, win, lose) are CC0 interface
- * recordings, quieter. Pre-selection / arrow moves / hover are silent. One sound of a kind at a time.
+ * clicks are CC0 recordings of a glass marble landing on wood (freesound KaleidacousticsAudio, tools/import_marbles.py):
+ * place / place_2 / place_3 rotate with ±5 % pitch; a hop mid-chain is the same family, lighter and a little higher;
+ * home = two glass marbles touching (home / home_2); pick / back = the softer retract click. UI cues (no, edge, win, lose)
+ * are CC0 interface recordings, quieter. Pre-selection / arrow moves / hover are silent. One sound of a kind at a time.
  */
 class SoundPlayer(context: Context) {
     @Volatile var enabled = true
@@ -89,7 +89,8 @@ class SoundPlayer(context: Context) {
     private val lastStream = HashMap<String, Int>()
 
     private fun fileOf(s: Sound): String = when (s) {
-        Sound.PLACE, Sound.HOP, Sound.HOME -> "place"
+        Sound.PLACE, Sound.HOP -> "place"
+        Sound.HOME -> "home"
         Sound.PICK, Sound.BACK -> "retract"
         Sound.NO, Sound.EDGE -> "illegal"
         Sound.WIN -> "win"
@@ -104,7 +105,7 @@ class SoundPlayer(context: Context) {
 
     private fun rateOf(s: Sound): Float = when (s) {
         Sound.HOP -> 1.06f + random.nextFloat() * 0.06f
-        Sound.HOME -> 1.22f
+        Sound.HOME -> 0.97f + random.nextFloat() * 0.06f
         Sound.PICK -> 1.12f
         Sound.PLACE, Sound.BACK -> 0.95f + random.nextFloat() * 0.10f
         else -> 1f

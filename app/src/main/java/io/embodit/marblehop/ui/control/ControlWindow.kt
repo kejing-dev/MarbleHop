@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -221,13 +222,14 @@ private fun NavKey(glyph: String, word: String, tag: String, enabled: Boolean, o
     KeyButton(glyph, word, tag, onClick = onClick, enabled = enabled, modifier = Modifier.width(76.dp).height(72.dp))
 }
 
-/** Marbles home per seat: one chip each (6 players: two rows of three). */
+/** Marbles home per seat: one chip each (4 players: two rows of two; 6 players: two rows of three). */
 @Composable
 private fun ProgressChips(state: PlayState) {
     val cfg = state.config ?: return
     val pos = state.position ?: return
     val seats = cfg.seats.toList()
-    val rows = if (seats.size > 4) seats.chunked(3) else listOf(seats)
+    // 4+ seats: two rows (4 -> 2 + 2, 6 -> 3 + 3) so English seat names never clip (QA #1 q1-1, D16)
+    val rows = if (seats.size > 3) seats.chunked((seats.size + 1) / 2) else listOf(seats)
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         rows.forEach { row ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -371,13 +373,24 @@ private fun RulesPage() {
                 Txt(stringResource(it), "rules/line", style = PicoTheme.typography.bodyMedium, maxLines = 3)
             }
         } else {
-            listOf(R.string.how_to_drag, R.string.how_to_tap, R.string.how_to_arrows).forEachIndexed { i, res ->
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Box(Modifier.size(40.dp).clip(CircleShape).background(Palette.PrimaryContainer), contentAlignment = Alignment.Center) {
-                        Txt("${i + 1}", "howto/n", style = PicoTheme.typography.titleMedium, color = Palette.OnPrimaryContainer)
+            // QA #1 q1-2: the three lines used to be spread by SpaceBetween (inner gap 24 % of the window);
+            // now three cards packed together, centred in the space under the segments.
+            Column(
+                Modifier.fillMaxWidth().weight(1f).padding(top = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+            ) {
+                listOf(R.string.how_to_drag, R.string.how_to_tap, R.string.how_to_arrows).forEachIndexed { i, res ->
+                    Row(
+                        Modifier.fillMaxWidth().heightIn(min = 96.dp).clip(RoundedCornerShape(20.dp))
+                            .background(PicoTheme.colorScheme.fillSecondary).padding(horizontal = 18.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Box(Modifier.size(40.dp).clip(CircleShape).background(Palette.PrimaryContainer), contentAlignment = Alignment.Center) {
+                            Txt("${i + 1}", "howto/n", style = PicoTheme.typography.titleMedium, color = Palette.OnPrimaryContainer)
+                        }
+                        Spacer(Modifier.width(14.dp))
+                        Txt(stringResource(res), "howto/line", style = PicoTheme.typography.titleMedium, maxLines = 3, modifier = Modifier.weight(1f))
                     }
-                    Spacer(Modifier.width(14.dp))
-                    Txt(stringResource(res), "howto/line", style = PicoTheme.typography.titleMedium, maxLines = 3, modifier = Modifier.weight(1f))
                 }
             }
         }

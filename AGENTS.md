@@ -1,6 +1,6 @@
 # Marble Hop 中国跳棋: project guidance
 
-Chinese checkers for PICO OS 6 Shared Space, PICO Spatial SDK 6.1.9, package `io.embodit.marblehop`, v0.1.0.
+Chinese checkers for PICO OS 6 Shared Space, PICO Spatial SDK 6.1.9, package `io.embodit.marblehop`, v0.1.1.
 Design contract: spatial-app-factory `apps/marble-hop/design-package.json` (v1.3) + `prd.html` + `sample.html`.
 Started from the factory board-game exemplar (two containers, theme, board-input template, sound player, debug receiver);
 the star board, rules, bots, scene and pages are new. `v2[]` of the design is not built (replay, notation codes, hints,
@@ -35,13 +35,18 @@ taps; drags summed with DragTotal; log mirrored to files/input-log.txt). Every h
 (0.92 x 0.86 pitch, tiling the face) with its visible groove disc `groove:<i>` (system HoverEffect draws there);
 marbles are `marble:<hole>`. The hit hole then goes to the nearest candidate within 1.5 pitches (gate B: big targets).
 
-## Build / test (Windows, kj-alienware)
+## Build / test (macOS kj-mbp-m5 since v0.1.1; Windows kj-alienware before)
+`local.properties` (not in git) needs `sdk.dir=` your Android SDK (macOS: `~/Library/Android/sdk`).
 ```bash
-export JAVA_HOME=/c/Users/Admin/.pico/primer-cli/jdk/jdk-21.0.12.1+1 PATH="$JAVA_HOME/bin:$PATH" JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=WINDOWS-ROOT
-./gradlew --offline assembleDebug :app:testDebugUnitTest
-python tools/build_icon.py --icon512 <factory>/apps/marble-hop/icon.png
-python tools/loudness.py <factory>/apps/marble-hop/qa/loudness-v0.1.0.wav
+# macOS
+export JAVA_HOME=~/.pico/primer-cli/jdk/jdk-21.0.13+9/Contents/Home
+# Windows Git Bash: export JAVA_HOME=/c/Users/<you>/.pico/primer-cli/jdk/<jdk-21> JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=WINDOWS-ROOT
+./gradlew assembleDebug :app:testDebugUnitTest
+python3 tools/build_icon.py --icon512 <factory>/apps/marble-hop/icon.png
+python3 tools/loudness.py <factory>/apps/marble-hop/qa/loudness-v<version>.wav
+~/.factory-venv/bin/python tools/import_marbles.py    # glass-marble sounds (numpy + scipy; macOS afconvert)
 ```
+`tools/mh.sh` / `tools/shot.sh` find adb via `$ADB`, PATH, or the SDK default on macOS / Windows.
 
 ## Debug broadcast (QA screenshots)
 `adb -s <serial> shell am broadcast -a io.embodit.marblehop.DEBUG -p io.embodit.marblehop --es cmd <cmd> --es a "<arg>"`
@@ -75,4 +80,4 @@ Modifiers: `lang zh|en|system`, `sound off|1|2|3`, `mute on|off`, `new "players=
 - Control window can open partly outside the view (system `Placement.right`).
 - Not verified on a headset: controller ray / eye-hand / hand ray on the 121 holes, drag feel, system pointer
   visibility, window handle drag, the volume really opening at 1.08 x 1.16 x 1.16 m (N15).
-- Sounds are SoundPool (not spatial). Sources: factory apps/marble-hop/build/sound-sources.md.
+- Sounds are SoundPool (not spatial). Glass-marble recordings since v0.1.1. Sources: factory apps/marble-hop/build/sound-sources.md.
