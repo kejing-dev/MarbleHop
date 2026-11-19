@@ -104,7 +104,7 @@ internal class BoardListener(private val graph: Graph) : BoardInputListener<Int>
 }
 
 /**
- * The board volume (default container, 1.08 x 1.16 x 1.16 m). Opens the control window beside it through the level
+ * The board volume (default container, 1.02 x 1.16 x 1.16 m). Opens the control window beside it through the level
  * gate, shows the board and routes pinch / trigger taps and drags on the 121 holes to GameFlow.
  */
 @Composable

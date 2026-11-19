@@ -29,7 +29,7 @@ data class V3(val x: Float, val y: Float, val z: Float) {
  */
 class BoardGeometry(val tiltDeg: Int = 75) {
     companion object {
-        val VOLUME = V3(1.08f, 1.16f, 1.16f)
+        val VOLUME = V3(1.02f, 1.16f, 1.16f)
         val PIVOT = V3(0f, -0.56f, 0.45f)
         const val BOARD_R = 0.50f
         const val FACE_R = 0.478f

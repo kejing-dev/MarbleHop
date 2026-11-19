@@ -70,7 +70,8 @@ import io.embodit.marblehop.ui.theme.Palette
 import kotlin.system.exitProcess
 
 /**
- * The control window (Planar WindowContainer beside the board, 560 x 540 dp): all 2D UI of the app, three pages
+ * The control window (Planar WindowContainer beside the board, 320 x 640 dp since v0.1.2 so it stays in the default view,
+ * QA #2 q2-1): all 2D UI of the app in one narrow column, three pages
  * switched by the native SpatialUI TabBar (D8): Game / Rules / Settings. The new-game setup lives on the game page
  * (design windowModel, B31). Dragging and closing are the system window controls under the window (D21).
  */
@@ -95,7 +96,7 @@ fun ControlWindow() {
         if (Ui.page != Page.SETTINGS) Ui.exitConfirm = false
     }
 
-    Box(Modifier.fillMaxSize().padding(horizontal = 24.dp, vertical = 20.dp)) {
+    Box(Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 20.dp)) {
         when (Ui.page) {
             Page.PLAY -> PlayPage(state, settings, graph)
             Page.RULES -> RulesPage()
@@ -133,14 +134,14 @@ private fun PlayPage(state: PlayState, settings: Settings, graph: Graph) {
 @Composable
 private fun WelcomeBlock(graph: Graph) {
     Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
-        Txt(stringResource(R.string.welcome_title), "welcome/title", style = PicoTheme.typography.headlineSmall)
+        Txt(stringResource(R.string.welcome_title), "welcome/title", style = PicoTheme.typography.headlineSmall, maxLines = 2)
         listOf(R.string.welcome_step_1, R.string.welcome_step_2, R.string.welcome_step_3).forEachIndexed { i, res ->
-            Row(Modifier.fillMaxWidth().height(56.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.fillMaxWidth().heightIn(min = 56.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(44.dp).clip(CircleShape).background(Palette.PrimaryContainer), contentAlignment = Alignment.Center) {
                     Txt("${i + 1}", "welcome/n", style = PicoTheme.typography.titleMedium, color = Palette.OnPrimaryContainer)
                 }
                 Spacer(Modifier.width(16.dp))
-                Txt(stringResource(res), "welcome/step", style = PicoTheme.typography.titleMedium, maxLines = 2, modifier = Modifier.weight(1f))
+                Txt(stringResource(res), "welcome/step", style = PicoTheme.typography.titleMedium, maxLines = 3, modifier = Modifier.weight(1f))
             }
         }
         PrimaryButton(stringResource(R.string.btn_first_game), "welcome/first", onClick = { graph.flow.firstGame() }, modifier = Modifier.fillMaxWidth())
@@ -153,7 +154,9 @@ private fun WelcomeBlock(graph: Graph) {
 private fun SetupBlock(state: PlayState, settings: Settings, graph: Graph) {
     val players = settings.lastPlayers
     val opp = settings.lastOpponent
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
+    // SpaceAround (v0.1.2, 640 dp tall window): the free height is shared by the gaps and both ends, so no inner gap
+    // reaches 20 % of the window (blank rule, 2026-11-05) on the short Chinese page
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceAround) {
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Txt(stringResource(R.string.setup_players), "setup/players-label", style = PicoTheme.typography.titleMedium)
             Row(Modifier.fillMaxWidth()) {
@@ -165,12 +168,12 @@ private fun SetupBlock(state: PlayState, settings: Settings, graph: Graph) {
             Row(Modifier.fillMaxWidth()) {
                 Segments(
                     listOf(Opponent.EASY to stringResource(R.string.opp_easy), Opponent.SMART to stringResource(R.string.opp_smart), Opponent.HOTSEAT to stringResource(R.string.opp_hotseat)),
-                    opp, "setup/opp", { o -> graph.flow.previewSetup(players, o) }, Modifier.weight(1f),
+                    opp, "setup/opp", { o -> graph.flow.previewSetup(players, o) }, Modifier.weight(1f), twoLines = true,
                 )
             }
         }
         Txt(stringResource(if (opp == Opponent.HOTSEAT) R.string.setup_note_hotseat else R.string.setup_note_bot), "setup/note",
-            style = PicoTheme.typography.bodyMedium, color = PicoTheme.colorScheme.labelSecondary, maxLines = 3)
+            style = PicoTheme.typography.bodyMedium, color = PicoTheme.colorScheme.labelSecondary, maxLines = 5)
         PrimaryButton(stringResource(R.string.btn_start), "setup/start", onClick = { graph.flow.newGame(players, opp) }, modifier = Modifier.fillMaxWidth())
         if (state.setupReturn) SecondaryButton(stringResource(R.string.btn_back_to_game), "setup/back", onClick = { graph.flow.backToGame() }, modifier = Modifier.fillMaxWidth())
     }
@@ -182,18 +185,19 @@ private fun GameBlock(state: PlayState, settings: Settings, graph: Graph) {
     val flow = graph.flow
     val cfg = state.config ?: return
     val camp = state.camp
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
+    // SpaceAround (v0.1.2): with the confirm row open (S13) the page has only four blocks; inner gaps stay < 20 %
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceAround) {
         // whose turn (same source as the sign, D38) + mute always on the main page (B31 exception, D15)
         Row(Modifier.fillMaxWidth().height(64.dp), verticalAlignment = Alignment.CenterVertically) {
-            SeatDot(camp, 30.dp)
-            Spacer(Modifier.width(12.dp))
+            SeatDot(camp, 26.dp)
+            Spacer(Modifier.width(10.dp))
             val turn = when {
                 state.phase == Phase.THINKING -> stringResource(R.string.turn_bot, seat(camp))
                 cfg.isHuman(camp) && !cfg.hotSeat -> stringResource(R.string.turn_you, seat(camp))
                 else -> stringResource(R.string.turn_seat, seat(camp))
             }
-            Txt(turn, "play/turn", style = PicoTheme.typography.titleLarge, modifier = Modifier.weight(1f))
-            if (state.phase == Phase.THINKING) { CircularProgressIndicator(modifier = Modifier.size(28.dp)); Spacer(Modifier.width(12.dp)) }
+            Txt(turn, "play/turn", style = PicoTheme.typography.titleMedium, maxLines = 2, modifier = Modifier.weight(1f))
+            if (state.phase == Phase.THINKING) { CircularProgressIndicator(modifier = Modifier.size(24.dp)); Spacer(Modifier.width(8.dp)) }
             ToggleButton(stringResource(R.string.btn_mute), "play/mute", on = settings.muted, onClick = { graph.settings.update { it.copy(muted = !it.muted) } })
         }
         ProgressChips(state)
@@ -201,13 +205,14 @@ private fun GameBlock(state: PlayState, settings: Settings, graph: Graph) {
         if (state.confirm != null) ConfirmBlock(state.confirm, graph)
         else {
             val navOn = state.humansTurn && state.phase in setOf(Phase.IDLE, Phase.SELECTED, Phase.PREVIEW, Phase.ALERT)
+            // narrow window (v0.1.2): the four arrow keys share one row, [落下] gets its own full-width row
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                NavKey("▲", stringResource(R.string.nav_up), "play/up", navOn) { flow.nav(Dir.UP) }
-                NavKey("▼", stringResource(R.string.nav_down), "play/down", navOn) { flow.nav(Dir.DOWN) }
-                NavKey("◀", stringResource(R.string.nav_left), "play/left", navOn) { flow.nav(Dir.LEFT) }
-                NavKey("▶", stringResource(R.string.nav_right), "play/right", navOn) { flow.nav(Dir.RIGHT) }
-                PrimaryButton(stringResource(R.string.btn_drop), "play/drop", onClick = { flow.drop() }, enabled = state.canDrop, modifier = Modifier.weight(1f))
+                NavKey("▲", stringResource(R.string.nav_up), "play/up", navOn, Modifier.weight(1f)) { flow.nav(Dir.UP) }
+                NavKey("▼", stringResource(R.string.nav_down), "play/down", navOn, Modifier.weight(1f)) { flow.nav(Dir.DOWN) }
+                NavKey("◀", stringResource(R.string.nav_left), "play/left", navOn, Modifier.weight(1f)) { flow.nav(Dir.LEFT) }
+                NavKey("▶", stringResource(R.string.nav_right), "play/right", navOn, Modifier.weight(1f)) { flow.nav(Dir.RIGHT) }
             }
+            PrimaryButton(stringResource(R.string.btn_drop), "play/drop", onClick = { flow.drop() }, enabled = state.canDrop, modifier = Modifier.fillMaxWidth())
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 SecondaryButton(stringResource(R.string.btn_undo), "play/undo", onClick = { flow.requestUndo() }, enabled = state.canUndo, modifier = Modifier.weight(1f), tall = true)
                 SecondaryButton(stringResource(R.string.btn_new_game), "play/new", onClick = { flow.requestNewGame() }, modifier = Modifier.weight(1f), tall = true)
@@ -216,10 +221,10 @@ private fun GameBlock(state: PlayState, settings: Settings, graph: Graph) {
     }
 }
 
-/** An arrow key: 76 x 72 dp, arrow glyph over its word (B19: icons carry text). */
+/** An arrow key: a quarter of the row (about 58 x 72 dp in the 320 dp window, 16 dp apart), arrow glyph over its word (B19: icons carry text). */
 @Composable
-private fun NavKey(glyph: String, word: String, tag: String, enabled: Boolean, onClick: () -> Unit) {
-    KeyButton(glyph, word, tag, onClick = onClick, enabled = enabled, modifier = Modifier.width(76.dp).height(72.dp))
+private fun NavKey(glyph: String, word: String, tag: String, enabled: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    KeyButton(glyph, word, tag, onClick = onClick, enabled = enabled, modifier = modifier.height(72.dp))
 }
 
 /** Marbles home per seat: one chip each (4 players: two rows of two; 6 players: two rows of three). */
@@ -228,17 +233,18 @@ private fun ProgressChips(state: PlayState) {
     val cfg = state.config ?: return
     val pos = state.position ?: return
     val seats = cfg.seats.toList()
-    // 4+ seats: two rows (4 -> 2 + 2, 6 -> 3 + 3) so English seat names never clip (QA #1 q1-1, D16)
-    val rows = if (seats.size > 3) seats.chunked((seats.size + 1) / 2) else listOf(seats)
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    // narrow window (v0.1.2): two chips per row (3 -> 2 + 1, 4 -> 2 + 2, 6 -> 2 + 2 + 2), each ≈ 136 dp, so English
+    // seat names never clip (QA #1 q1-1, D16)
+    val rows = seats.chunked(2)
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         rows.forEach { row ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 row.forEach { c ->
                     val home = StarRules.homeCounts(pos, c).first
                     val current = c == state.camp && state.result == null
                     Row(
-                        Modifier.weight(1f).height(44.dp).clip(RoundedCornerShape(22.dp))
-                            .background(if (current) Palette.PrimaryContainer else PicoTheme.colorScheme.fillSecondary).padding(horizontal = 12.dp),
+                        Modifier.weight(1f).height(40.dp).clip(RoundedCornerShape(20.dp))
+                            .background(if (current) Palette.PrimaryContainer else PicoTheme.colorScheme.fillSecondary).padding(horizontal = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         SeatDot(c, 18.dp)
@@ -265,9 +271,9 @@ private fun HintLine(state: PlayState) {
         Phase.THINKING -> R.string.hint_bot
         else -> R.string.hint_rotating
     }
-    Column(Modifier.fillMaxWidth().height(60.dp), verticalArrangement = Arrangement.Center) {
-        Txt(line.text(), "play/status", style = PicoTheme.typography.titleMedium, color = if (line.alert) Palette.ErrorText else PicoTheme.colorScheme.labelPrimary)
-        Txt(stringResource(hint), "play/hint", style = PicoTheme.typography.bodyMedium, color = PicoTheme.colorScheme.labelSecondary)
+    Column(Modifier.fillMaxWidth().heightIn(min = 60.dp), verticalArrangement = Arrangement.Center) {
+        Txt(line.text(), "play/status", style = PicoTheme.typography.titleMedium, maxLines = 2, color = if (line.alert) Palette.ErrorText else PicoTheme.colorScheme.labelPrimary)
+        Txt(stringResource(hint), "play/hint", style = PicoTheme.typography.bodyMedium, maxLines = 3, color = PicoTheme.colorScheme.labelSecondary)
     }
 }
 
@@ -283,7 +289,7 @@ private fun ConfirmBlock(kind: ConfirmKind, graph: Graph) {
         ConfirmKind.EXIT -> R.string.confirm_exit to R.string.confirm_yes_exit
     }
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Txt(stringResource(q), "confirm/${kind.name}", style = PicoTheme.typography.titleMedium, maxLines = 2)
+        Txt(stringResource(q), "confirm/${kind.name}", style = PicoTheme.typography.titleMedium, maxLines = 3)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             SecondaryButton(stringResource(R.string.btn_cancel), "confirm/cancel", onClick = { flow.cancelConfirm() }, modifier = Modifier.weight(1f), tall = true)
             SecondaryButton(stringResource(yes), "confirm/yes", danger = kind != ConfirmKind.UNDO_2P, onClick = {
@@ -299,7 +305,7 @@ private fun HandoffBlock(state: PlayState, graph: Graph) {
     val camp = state.camp
     Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally) {
         SeatDot(camp, 96.dp)
-        Txt(stringResource(R.string.handoff_title, seat(camp)), "handoff/title", style = PicoTheme.typography.headlineSmall)
+        Txt(stringResource(R.string.handoff_title, seat(camp)), "handoff/title", style = PicoTheme.typography.headlineSmall, maxLines = 2, align = TextAlign.Center)
         val last = state.moves.withIndex().lastOrNull { it.value.from >= 0 }
         val lastText = if (last == null) stringResource(R.string.handoff_none) else {
             val m = last.value
@@ -312,7 +318,7 @@ private fun HandoffBlock(state: PlayState, graph: Graph) {
             }
             stringResource(R.string.handoff_last, seat(state.config!!.campAt(last.index)), what)
         }
-        Txt(lastText, "handoff/last", style = PicoTheme.typography.bodyLarge, color = PicoTheme.colorScheme.labelSecondary)
+        Txt(lastText, "handoff/last", style = PicoTheme.typography.bodyLarge, maxLines = 2, align = TextAlign.Center, color = PicoTheme.colorScheme.labelSecondary)
         if (state.confirm != null) ConfirmBlock(state.confirm, graph)
         else {
             PrimaryButton(stringResource(R.string.btn_handoff_start), "handoff/start", onClick = { graph.flow.handoffStart() }, enabled = state.phase == Phase.HANDOFF,
@@ -335,11 +341,11 @@ private fun ResultBlock(state: PlayState, graph: Graph) {
             SeatDot(r.winner, 36.dp)
             Spacer(Modifier.width(12.dp))
             val title = if (!cfg.hotSeat && r.winner == 0) stringResource(R.string.result_you_win) else stringResource(R.string.result_wins, seat(r.winner))
-            Txt(title, "result/title", style = PicoTheme.typography.headlineSmall)
+            Txt(title, "result/title", style = PicoTheme.typography.headlineSmall, maxLines = 2, modifier = Modifier.weight(1f))
         }
-        Txt(stringResource(R.string.result_stats, r.moves, time, r.longestChain), "result/stats", style = PicoTheme.typography.bodyLarge, color = PicoTheme.colorScheme.labelSecondary)
+        Txt(stringResource(R.string.result_stats, r.moves, time, r.longestChain), "result/stats", style = PicoTheme.typography.bodyLarge, maxLines = 2, color = PicoTheme.colorScheme.labelSecondary)
         val places = r.ranking.withIndex().toList()
-        val cols = if (places.size >= 4) places.chunked((places.size + 1) / 2) else listOf(places)
+        val cols = listOf(places) // one column in the narrow window (v0.1.2)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             cols.forEach { col ->
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -370,14 +376,14 @@ private fun RulesPage() {
         if (Ui.rulesView == 0) {
             RulesDiagram()
             listOf(R.string.rules_1, R.string.rules_2, R.string.rules_3, R.string.rules_4, R.string.rules_5).forEach {
-                Txt(stringResource(it), "rules/line", style = PicoTheme.typography.bodyMedium, maxLines = 3)
+                Txt(stringResource(it), "rules/line", style = PicoTheme.typography.bodyMedium, maxLines = 5)
             }
         } else {
             // QA #1 q1-2: the three lines used to be spread by SpaceBetween (inner gap 24 % of the window);
             // now three cards packed together, centred in the space under the segments.
             Column(
                 Modifier.fillMaxWidth().weight(1f).padding(top = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+                verticalArrangement = Arrangement.SpaceEvenly,
             ) {
                 listOf(R.string.how_to_drag, R.string.how_to_tap, R.string.how_to_arrows).forEachIndexed { i, res ->
                     Row(
@@ -389,7 +395,7 @@ private fun RulesPage() {
                             Txt("${i + 1}", "howto/n", style = PicoTheme.typography.titleMedium, color = Palette.OnPrimaryContainer)
                         }
                         Spacer(Modifier.width(14.dp))
-                        Txt(stringResource(res), "howto/line", style = PicoTheme.typography.titleMedium, maxLines = 3, modifier = Modifier.weight(1f))
+                        Txt(stringResource(res), "howto/line", style = PicoTheme.typography.titleMedium, maxLines = 4, modifier = Modifier.weight(1f))
                     }
                 }
             }
@@ -402,8 +408,8 @@ private fun RulesPage() {
 private fun RulesDiagram() {
     val step = stringResource(R.string.rules_step)
     val hop = stringResource(R.string.rules_hop)
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        Canvas(Modifier.size(width = 300.dp, height = 72.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Canvas(Modifier.fillMaxWidth().height(72.dp)) {
             val r = size.height * 0.18f
             val y = size.height * 0.62f
             val gap = size.width / 7f
@@ -419,7 +425,7 @@ private fun RulesDiagram() {
             val path = androidx.compose.ui.graphics.Path().apply { moveTo(gap * 3.5f, y - r); quadraticTo(gap * 4.5f, y - r * 4.2f, gap * 5.5f, y - r) }
             drawPath(path, Palette.Ink, style = Stroke(3f))
         }
-        Column {
+        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
             Txt("● → ·  $step", "rules/legend-step", style = PicoTheme.typography.bodyMedium)
             Txt("● ⤳ ○  $hop", "rules/legend-hop", style = PicoTheme.typography.bodyMedium)
         }
@@ -453,18 +459,18 @@ private fun SettingsPage(settings: Settings, graph: Graph) {
                 enabled = i < Settings.TILTS.lastIndex, modifier = Modifier.weight(1f))
         }
         SecondaryButton(stringResource(R.string.settings_reopen), "settings/reopen", onClick = { graph.window.recall() }, modifier = Modifier.fillMaxWidth())
-        Txt(stringResource(R.string.settings_reopen_hint), "settings/reopen-hint", style = PicoTheme.typography.bodySmall, color = PicoTheme.colorScheme.labelSecondary, maxLines = 2)
+        Txt(stringResource(R.string.settings_reopen_hint), "settings/reopen-hint", style = PicoTheme.typography.bodySmall, color = PicoTheme.colorScheme.labelSecondary, maxLines = 3)
         // D26: quit; the confirmation opens in the same place (no second panel, no scrolling).
         if (!Ui.exitConfirm) {
             SecondaryButton(stringResource(R.string.settings_exit), "settings/exit", onClick = { Ui.exitConfirm = true; Log.i(TAG, "CONFIRM EXIT S13") }, modifier = Modifier.fillMaxWidth(), danger = true)
         } else {
-            Txt(stringResource(R.string.confirm_exit), "settings/exit-q", style = PicoTheme.typography.titleMedium)
+            Txt(stringResource(R.string.confirm_exit), "settings/exit-q", style = PicoTheme.typography.titleMedium, maxLines = 2)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 SecondaryButton(stringResource(R.string.btn_cancel), "settings/exit-cancel", onClick = { Ui.exitConfirm = false }, modifier = Modifier.weight(1f))
                 SecondaryButton(stringResource(R.string.confirm_yes_exit), "settings/exit-yes", onClick = { exitApp(context, navigator, graph) }, modifier = Modifier.weight(1f), danger = true)
             }
         }
-        Txt(stringResource(R.string.settings_about, BuildConfig.VERSION_NAME), "settings/about", style = PicoTheme.typography.bodySmall, color = PicoTheme.colorScheme.labelSecondary, maxLines = 2)
+        Txt(stringResource(R.string.settings_about, BuildConfig.VERSION_NAME), "settings/about", style = PicoTheme.typography.bodySmall, color = PicoTheme.colorScheme.labelSecondary, maxLines = 3)
     }
 }
 

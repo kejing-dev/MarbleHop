@@ -1,18 +1,18 @@
 # Marble Hop 中国跳棋: project guidance
 
-Chinese checkers for PICO OS 6 Shared Space, PICO Spatial SDK 6.1.9, package `io.embodit.marblehop`, v0.1.1.
+Chinese checkers for PICO OS 6 Shared Space, PICO Spatial SDK 6.1.9, package `io.embodit.marblehop`, v0.1.2.
 Design contract: spatial-app-factory `apps/marble-hop/design-package.json` (v1.3) + `prd.html` + `sample.html`.
 Started from the factory board-game exemplar (two containers, theme, board-input template, sound player, debug receiver);
 the star board, rules, bots, scene and pages are new. `v2[]` of the design is not built (replay, notation codes, hints,
 resign, second skin, per-seat bot mixing, 2-ply bot, super hops, online play).
 
 ## Surfaces
-- **Board volume** (default container `MarbleBoard`, Volumetric 1.08 x 1.16 x 1.16 m, Fixed scale, gravity aligned,
+- **Board volume** (default container `MarbleBoard`, Volumetric 1.02 x 1.16 x 1.16 m (1.08 before v0.1.2), Fixed scale, gravity aligned,
   no base panel material): Ø 1.00 m walnut slab + beech face + rim, 121 holes (pitch 6.5 cm) tilted about the near
   bottom edge (0 / 30 / 45 / 60 / 75 / 90°, default 75°), 60 glass marbles Ø 4.6 cm in six seat colours, six seat pips
   on the rim, lit holes (blue dot = step, amber ring = hop), select ring, ghost marble, chain dots, red ring, landing
   glow, hop trails, and the status sign (AttachmentPanel, upright beyond the far edge).
-- **Control window** (`MarbleControl`, Planar 560 x 540 dp, `Placement.right(board)`): native SpatialUI `TabBar` with
+- **Control window** (`MarbleControl`, Planar 320 x 640 dp fixed, `Placement.right(board)`): native SpatialUI `TabBar` with
   3 pages Game / Rules / Settings. The new-game setup, hand-over and result live on the Game page. Opened through
   `LevelGate` (D9). Settings → 重开控制窗 closes, waits for ON_DESTROY, reopens beside the board.
 
@@ -77,7 +77,11 @@ Modifiers: `lang zh|en|system`, `sound off|1|2|3`, `mute on|off`, `new "players=
 `dump`, `evidence`.
 
 ## Known
-- Control window can open partly outside the view (system `Placement.right`).
+- Cold-start view (QA #2 q2-1, fixed in v0.1.2): Shared Space centres the VOLUME, and `Placement.right` hangs the window off
+  its right face (offset can't be negative). 560 dp reached ~+45–48°. Now: volume 1.02 m wide (board Ø 1.00 unchanged,
+  1 cm side margin) + window 320 x 640 dp (320 dp is the narrowest Planar window: asking 280 still opened 320, logcat
+  `size(640, 1800)`). Measured right edge 38.1° (±39° view), saved-game and cleared-data starts alike.
+  `domain/ControlPlacement.kt` + `ControlPlacementTest` hold the model; keep every page inside 320 dp (one column).
 - Not verified on a headset: controller ray / eye-hand / hand ray on the 121 holes, drag feel, system pointer
-  visibility, window handle drag, the volume really opening at 1.08 x 1.16 x 1.16 m (N15).
+  visibility, window handle drag, the volume really opening at 1.02 x 1.16 x 1.16 m (N15).
 - Sounds are SoundPool (not spatial). Glass-marble recordings since v0.1.1. Sources: factory apps/marble-hop/build/sound-sources.md.

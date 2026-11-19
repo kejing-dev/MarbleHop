@@ -79,12 +79,14 @@ internal fun SecondaryButton(text: String, tag: String, onClick: () -> Unit, mod
     }
 }
 
-/** A key with a glyph over its word (arrow keys: >= 60 dp, design input.nav; B19 icons carry text). */
+/** A key with a glyph over its word (arrow keys >= 52 dp wide x 72 dp; B19 icons carry text). */
 @Composable
 internal fun KeyButton(glyph: String, word: String, tag: String, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
     Button(
         onClick = onClick, modifier = modifier, enabled = enabled,
-        size = ButtonDefaults.Regular.copy(height = 72.dp, minWidth = 64.dp),
+        size = ButtonDefaults.Regular.copy(height = 72.dp, minWidth = 52.dp),
+        // the 320 dp window gives each key ≈ 64 dp: the default side padding left "Down" no room (OVERFLOW play/down/word)
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp, vertical = 6.dp),
         shape = RoundedCornerShape(20.dp),
         colors = ButtonDefaults.buttonColors(containerColor = PicoTheme.colorScheme.fillSecondary, contentColor = PicoTheme.colorScheme.labelPrimary),
     ) {
@@ -115,17 +117,18 @@ internal fun ToggleButton(text: String, tag: String, on: Boolean, onClick: () ->
 
 /** A labelled row holding a same-page option switch (SegmentControl is never used to change pages). */
 @Composable
-internal fun OptionRow(label: String, tag: String, labelWidth: Dp = 112.dp, rowHeight: Dp = 56.dp, content: @Composable RowScope.() -> Unit) {
-    Row(Modifier.fillMaxWidth().height(rowHeight), verticalAlignment = Alignment.CenterVertically) {
-        Txt(label, "$tag/label", style = PicoTheme.typography.labelLarge, color = PicoTheme.colorScheme.labelPrimary, modifier = Modifier.width(labelWidth))
-        content()
+internal fun OptionRow(label: String, tag: String, rowHeight: Dp = 56.dp, content: @Composable RowScope.() -> Unit) {
+    // narrow window (v0.1.2, 320 dp): the label sits above its control so the control gets the full width
+    androidx.compose.foundation.layout.Column(Modifier.fillMaxWidth(), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)) {
+        Txt(label, "$tag/label", style = PicoTheme.typography.labelLarge, color = PicoTheme.colorScheme.labelPrimary)
+        Row(Modifier.fillMaxWidth().height(rowHeight), verticalAlignment = Alignment.CenterVertically) { content() }
     }
 }
 
 @Composable
-internal fun <T> Segments(options: List<Pair<T, String>>, selected: T, tag: String, onSelect: (T) -> Unit, modifier: Modifier = Modifier, small: Boolean = false) {
+internal fun <T> Segments(options: List<Pair<T, String>>, selected: T, tag: String, onSelect: (T) -> Unit, modifier: Modifier = Modifier, small: Boolean = false, twoLines: Boolean = false) {
     // B19: the control itself is >= 48 dp tall (the default track is ~37 dp).
-    SegmentControl(modifier = modifier.height(52.dp)) {
+    SegmentControl(modifier = modifier.height(if (twoLines) 72.dp else 52.dp)) {
         options.forEach { (value, label) ->
             SegmentItem(
                 selected = value == selected,
@@ -133,7 +136,9 @@ internal fun <T> Segments(options: List<Pair<T, String>>, selected: T, tag: Stri
                 modifier = Modifier.weight(1f).fillMaxHeight(),
                 title = {
                     // design-style: inherited-content-color SegmentItem
-                    Txt(label, "$tag/segment", style = if (small) PicoTheme.typography.labelMedium else PicoTheme.typography.labelLarge, color = PicoTheme.colorScheme.labelPrimary)
+                    // twoLines: long labels (English opponent names) wrap inside the 52 dp segment instead of clipping (320 dp window)
+                    Txt(label, "$tag/segment", style = if (small || twoLines) PicoTheme.typography.labelMedium else PicoTheme.typography.labelLarge, color = PicoTheme.colorScheme.labelPrimary,
+                        maxLines = if (twoLines) 2 else 1, align = androidx.compose.ui.text.style.TextAlign.Center)
                 },
             )
         }
